@@ -124,13 +124,13 @@ class Add : DialogFragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val options = mutableListOf<String>()
-                    val vaccineMap = mutableMapOf<String, DocumentSnapshot>() // Map to store document snapshot corresponding to each vaccine
+                    val vaccineMap = mutableMapOf<String, DocumentSnapshot>()
                     options.add("Select Vaccine")
                     for (document in task.result) {
                         val optionName = document.getString("name")
                         optionName?.let {
                             options.add(it)
-                            vaccineMap[it] = document // Store document snapshot in the map
+                            vaccineMap[it] = document
                         }
                     }
                     val adapter = ArrayAdapter(requireContext(), R.layout.item_dropdown, options)
@@ -147,7 +147,6 @@ class Add : DialogFragment() {
                                 doses = selectedDocument.getLong("doses") ?: 0
                                 duration = selectedDocument.getLong("duration") ?: 0
                                 desc = selectedDocument.getString("desc").toString()
-                                updateProposedDate()
 
                                 // Initialize variables to track latest appointment document
                                 var latestNextDose: Date? = null
@@ -163,16 +162,18 @@ class Add : DialogFragment() {
                                                 if (nextDose != null && (latestNextDose == null || nextDose.after(latestNextDose))) {
                                                     latestNextDose = nextDose
                                                     latestAppointmentDocument = appointmentDocument
+                                                    sendDate = nextDose.toString()
                                                 }
                                             }
 
                                             if (latestAppointmentDocument != null) {
                                                 val latestND = latestAppointmentDocument!!.getDate("nextDose")
                                                 if (latestNextDose != null) {
-                                                    lastDate = sendDate
-                                                    sendDate = latestND?.let { sendDateFormat.format(it) }.toString()
+                                                    lastDate = latestND.toString()
                                                 }
                                             }
+
+                                            updateProposedDate()
                                         } else {
                                             println("Error getting documents: ${appointmentDocuments.exception}")
                                         }
@@ -191,6 +192,7 @@ class Add : DialogFragment() {
             }
     }
 
+
     /**
      * Updates the proposed date for the appointment based on the current date, number of doses,
      * and duration between doses, along with the dynamically fetched `sendDate` value from Firestore.
@@ -205,10 +207,7 @@ class Add : DialogFragment() {
         if (sendDate.isEmpty()) {
             calendar.add(Calendar.DAY_OF_YEAR, 7)
         } else {
-            val lastDoseCalendar = Calendar.getInstance()
-            lastDoseCalendar.timeInMillis = System.currentTimeMillis()
-            lastDoseCalendar.add(Calendar.DAY_OF_YEAR, -duration.toInt())
-            calendar.timeInMillis = lastDoseCalendar.timeInMillis
+            calendar.timeInMillis = System.currentTimeMillis()
             calendar.add(Calendar.DAY_OF_YEAR, duration.toInt())
         }
 
