@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tryingmybest.R
 /**
- * Adapter for displaying a calendar in a RecyclerView.
+ * Adapter for displaying a calendar visible in the Home Activity.
  * This adapter takes a list of days in a month and displays them in the RecyclerView.
  * It provides a callback interface [OnItemListener] to handle item click events.
  * @param daysOfMonth List of days in the month to be displayed.

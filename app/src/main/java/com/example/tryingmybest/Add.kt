@@ -167,13 +167,13 @@ class Add : DialogFragment() {
                                             }
 
                                             if (latestAppointmentDocument != null) {
-                                                val latestND = latestAppointmentDocument!!.getDate("nextDose")
-                                                if (latestNextDose != null) {
-                                                    lastDate = latestND.toString()
-                                                }
+                                                lastDate = sendDateFormat.format(latestNextDose!!)
+                                                sendDate = sendDateFormat.format(latestNextDose!!)
+                                                updateProposedDate()
                                             }
 
                                             updateProposedDate()
+
                                         } else {
                                             println("Error getting documents: ${appointmentDocuments.exception}")
                                         }
@@ -195,7 +195,7 @@ class Add : DialogFragment() {
 
     /**
      * Updates the proposed date for the appointment based on the current date, number of doses,
-     * and duration between doses, along with the dynamically fetched `sendDate` value from Firestore.
+     * and duration between doses, along with fetched `sendDate` value from Firestore.
      * If `sendDate` is null or not set, the proposed date is set to 7 days from the current date.
      * If `sendDate` is available, the proposed date is calculated based on the duration from the `sendDate`.
      * Also, the function sets the notification TV to one day before the proposed date.
@@ -215,7 +215,6 @@ class Add : DialogFragment() {
         val proposedDate = showFormat.format(calendar.time)
         date.text = proposedDate
         sendDate = sendDateFormat.format(calendar.time)
-
         // Set the notification TV to a day before the proposed date
         calendar.add(Calendar.DAY_OF_YEAR, -1)
         val dayBefore = fullFormat.format(calendar.time)
@@ -285,18 +284,19 @@ class Add : DialogFragment() {
             hashMapOf(
                 "name" to name,
                 "email" to email,
-                ("nextDose" to sendDateFormat.parse(sendDate)) as Pair<String, Any>,
-                ("lastDose" to sendDateFormat.parse(lastDate)) as Pair<String, Any>,
+                ("nextDose" to sendDateFormat.parse(sendDate)) as Pair<String, Any>, // Parse sendDate using sendDateFormat
+                ("lastDose" to sendDateFormat.parse(lastDate)) as Pair<String, Any>, // Parse lastDate using sendDateFormat
                 "desc" to desc
             )
         } else {
             hashMapOf(
                 "name" to name,
                 "email" to email,
-                ("nextDose" to sendDateFormat.parse(sendDate)) as Pair<String, Any>,
+                ("nextDose" to sendDateFormat.parse(sendDate)) as Pair<String, Any>, // Parse sendDate using sendDateFormat
                 "desc" to desc
             )
         }
+
 
         FirebaseFirestore.getInstance().collection("appointments").add(appointmentData)
             .addOnCompleteListener { task ->

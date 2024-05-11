@@ -78,11 +78,16 @@ class AdapterHistory(private val historyList: List<DataVaxx>) :
         }
     }
 
+    /**
+     * return the size of the List
+     */
     override fun getItemCount(): Int {
         return filteredList.size
     }
 
-    //filter the items by the name
+    /**
+     * filter the items by the name
+     */
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
