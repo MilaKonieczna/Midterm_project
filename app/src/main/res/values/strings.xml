@@ -79,4 +79,11 @@
     <string name="add_notification">Add Notification</string>
     <string name="set_notification">Set notification date</string>
     <string name="set_appointment">Set appointment date</string>
+    <string name="vaccines">Vaccines</string>
+    <string name="users">Users</string>
+    <string name="description">Description:</string>
+    <string name="doses">Doses:</string>
+    <string name="duration">Duration:</string>
+    <string name="_365">365</string>
+    <string name="_4">4</string>
 </resources>
