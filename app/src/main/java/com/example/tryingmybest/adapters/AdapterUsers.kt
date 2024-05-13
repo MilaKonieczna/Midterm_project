@@ -127,7 +127,6 @@ class AdapterUsers(private val usersList: List<DataUser>) :
             .setNegativeButton("Cancel", null)
             .show()
     }
-
     private fun deleteItem(position: Int) {
         val deletedUser = filteredList[position]
 
