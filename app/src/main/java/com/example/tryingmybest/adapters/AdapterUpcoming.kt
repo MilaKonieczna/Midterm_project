@@ -185,7 +185,6 @@ class AdapterUpcoming(private val upcomingList: List<DataVaxx>) :
             }
     }
 
-
     private fun showDeleteConfirmationDialog(context: Context, position: Int) {
         AlertDialog.Builder(context)
             .setTitle("Delete User")
